@@ -2,13 +2,14 @@
 import 'package:get/get.dart';
 import 'package:sat_exam_portal/api_value.dart';
 
-class studentController extends GetxController{
+class QuestionPaperController extends GetxController{
    Dio dio = Dio();
 
- Future<List<Map<String, dynamic>>> fetchExams(String school_id) async {
+ Future<List<Map<String, dynamic>>> fetchQuestionPaper(String exam_id) async {
   
     try {
-      final response = await dio.get(apiValue.examListUrl+school_id);
+      final response = await dio.get(apiValue.questionPaperUrl+exam_id);
+      print(apiValue.questionPaperUrl+exam_id);
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
         final List<Map<String, dynamic>> typedData = data.cast<Map<String, dynamic>>();

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sat_exam_portal/controllers/student_question_controller.dart';
+import 'package:sat_exam_portal/screens/exam_portal/exam_portal_screen.dart';
 
 class studentDashboard extends StatefulWidget {
   const studentDashboard({super.key});
@@ -15,21 +16,21 @@ class studentDashboard extends StatefulWidget {
 
 class _studentDashboardState extends State<studentDashboard> {
   bool isFetched = false;
-  final String school_id = "SCH0012";
+  final String school_id = "1122";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchQuestionBank();
+    fetchExams();
 
   }
-  final studentController spc = Get.put(studentController());
+  final studentController student = Get.put(studentController());
    List<Map<String, dynamic>> questionBank = [];
   final TextEditingController searchController = TextEditingController();
   String level='';
-  fetchQuestionBank()async{
+  fetchExams()async{
     try {
-      List<Map<String, dynamic>> data = await spc.fetchQuestion(school_id);
+      List<Map<String, dynamic>> data = await student.fetchExams(school_id);
       setState(() {
         questionBank = data;
         isFetched = true;
@@ -132,12 +133,12 @@ class _studentDashboardState extends State<studentDashboard> {
                                 ),
                                 SizedBox(height: 4.0),
                                 Text(
-                                  'Start time',
+                                  'Total marks',
                                   style: TextStyle(fontSize: 16.0),
                                 ),
                                 SizedBox(height: 4.0),
                                 Text(
-                                  'Total marks',
+                                  'Class',
                                   style: TextStyle(fontSize: 16.0),
                                 ),
                               ],
@@ -148,11 +149,14 @@ class _studentDashboardState extends State<studentDashboard> {
                               itemCount: questionBank.length,
                               itemBuilder: (context, index) {
                                 final item = questionBank[index];
-                                return ListTemplate(
-                                  test_name: item['test_name']!,
-                                  duration: item['duration']!,
-                                  total_marks: item['total_marks']!,
-                                  marks: item['class']!,
+                                return GestureDetector(
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamPortalScreen(exam_id: item['_id'], exam_name: item['test_name'],total_marks: item['total_marks'],))),
+                                  child: ListTemplate(
+                                    test_name: item['test_name']!,
+                                    duration: item['duration']!,
+                                    total_marks: item['total_marks']!,
+                                    marks: item['class']!,
+                                  ),
                                 );
                               },
                             ),

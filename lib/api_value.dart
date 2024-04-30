@@ -10,8 +10,10 @@ class ApiValue {
   String questionUploadUrl = '${url[isBeta]}post/question_bank';
   String questionListUrl = '${url[isBeta]}get/question_bank';
   String searchQuestionUrl = '${url[isBeta]}search/question_bank';
-  //========================================================Question Bank
+  //========================================================Exam 
   String examListUrl = '${url[isBeta]}exam_details?school_id=';
+  //========================================================Exam 
+  String questionPaperUrl = '${url[isBeta]}fetch_questions_by_id?_id=';
   //========================================================Category List
 }
 
