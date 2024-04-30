@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sat_exam_portal/controllers/spoc_question_controller.dart';
 import 'package:sat_exam_portal/screens/auth/student_register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,11 +13,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
     bool _keepLoggedIn = false;
     String _selectedUser = 'Select user type';
+    String spocUserName="";
+    String spocPassword="";
+    String studentUserName="";
+    String studentPassword="";
 
   @override
   Widget build(BuildContext context) {
+    final SpocController spc = Get.put(SpocController());
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    TextEditingController usernameController=TextEditingController();
+    TextEditingController passwordController=TextEditingController();
     return Scaffold(
       body: Container(
       width: screenWidth,
@@ -122,6 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                               onChanged: (value) {
                                 setState(() {
                                   _selectedUser = value!;
+                                  usernameController.clear();
+                                  passwordController.clear();
                                 });
                               },
                               items:["Select user type",'SPOC', 'Student']
@@ -137,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                        SizedBox(height: screenHeight*0.02,),
                       TextField(
+                        controller: usernameController,
                       cursorColor: Colors.deepPurple,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: screenHeight*0.01),
@@ -159,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                      SizedBox(height: screenHeight*0.02,),
                       TextField(
+                        controller: passwordController,
                       cursorColor: Colors.deepPurple,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -206,14 +218,30 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       SizedBox(height: screenHeight*0.03,),
-                      Container(
-                        height: screenHeight*0.06,
-                        //width:screenWidth*0.1,
-                        decoration: BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(10)
+                      InkWell(
+                        onTap: ()async {
+                          if(_selectedUser=="SPOC"&& _selectedUser!="Student"&&_selectedUser!="Select user type"){
+                          spocUserName=usernameController.text.toString();
+                          spocPassword=passwordController.text.toString();
+                          await spc.spocLogin(spocUserName, spocPassword);
+                        }else if(_selectedUser=="Student"&& _selectedUser!="SPOC"&&_selectedUser!="Select user type"){
+                          studentUserName=usernameController.text.toString();
+                          studentPassword=passwordController.text.toString();
+                          await spc.studentLogin(studentUserName, studentPassword);
+                        }
+                        else{
+                          print("Select user type");
+                        }
+                        },
+                        child: Container(
+                          height: screenHeight*0.06,
+                          //width:screenWidth*0.1,
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          child: Center(child: Text("Login",style: TextStyle(fontSize: 14,color: Colors.white),)),
                         ),
-                        child: Center(child: Text("Login",style: TextStyle(fontSize: 14,color: Colors.white),)),
                       ),
                     ],
                   ),

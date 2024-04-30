@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         primaryIconTheme: IconThemeData(color: Colors.deepPurple),
       ),
-      home: studentDashboard(),
+      home: LoginPage(),
     );
   }
 }

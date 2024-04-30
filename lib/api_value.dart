@@ -5,7 +5,8 @@ class ApiValue {
   ];
   static int isBeta = 1;
   //========================================================Authentication
-  // String userRegisterUrl = '${url[isBeta]}user';
+  String spocLoginUrl = '${url[isBeta]}spoc_login';
+  String studentLoginUrl = '${url[isBeta]}login/student';
   //========================================================Question Bank
   String questionUploadUrl = '${url[isBeta]}post/question_bank';
   String questionListUrl = '${url[isBeta]}get/question_bank';
@@ -14,6 +15,8 @@ class ApiValue {
   String examListUrl = '${url[isBeta]}exam_details?school_id=';
   //========================================================Exam 
   String questionPaperUrl = '${url[isBeta]}fetch_questions_by_id?_id=';
+  String detailQuestionUrl = '${url[isBeta]}question_popup';
+  String createQuestioPaperUrl = '${url[isBeta]}question-papers';
   //========================================================Category List
 }
 

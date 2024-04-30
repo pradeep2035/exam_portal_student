@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sat_exam_portal/screens/spoc_question_creation.dart';
 
 class SpocDashboard extends StatefulWidget {
   const SpocDashboard({super.key});
@@ -73,7 +74,7 @@ class _SpocDashboardState extends State<SpocDashboard> {
                             left: screenWidth * 0.1,
                             child: GestureDetector(
                               onTap: () {
-                               // Get.to(()=>);
+                                Get.to(()=>QuestionPaper());
                               },
                               child: Container(
                                 height: screenHeight * 0.23,
