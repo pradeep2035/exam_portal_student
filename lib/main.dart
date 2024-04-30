@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_const_constructors, unused_import
+
 import 'package:flutter/material.dart';
+import 'package:sat_exam_portal/screens/dashboards/student_dashboard.dart';
 import 'package:sat_exam_portal/screens/spoc_question_creation.dart';
 import 'package:sat_exam_portal/screens/auth/login.dart';
 import 'package:get/get.dart';
@@ -24,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
         primaryIconTheme: IconThemeData(color: Colors.deepPurple),
       ),
-      home: QuestionPaper(),
+      home: studentDashboard(),
     );
   }
 }
