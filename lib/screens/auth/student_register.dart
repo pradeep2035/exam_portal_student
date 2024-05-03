@@ -1,9 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sat_exam_portal/components/textfields.dart';
 import 'package:sat_exam_portal/components/timeline_student_register.dart';
 import 'package:intl/intl.dart';
+import 'package:sat_exam_portal/controllers/student_controller.dart';
+import 'package:sat_exam_portal/screens/auth/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class StudentRegistration extends StatefulWidget {
@@ -14,15 +19,19 @@ class StudentRegistration extends StatefulWidget {
 }
 
 class _StudentRegistrationState extends State<StudentRegistration> {
+  final StudentController studentController = Get.put(StudentController());
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
   TextEditingController fatherName = TextEditingController();
-  TextEditingController fatherMobile = TextEditingController();
+  TextEditingController classController= TextEditingController();
   TextEditingController dob = TextEditingController();
   TextEditingController studentMobile = TextEditingController();
   TextEditingController studentMail = TextEditingController();
   TextEditingController schoolId = TextEditingController();
   TextEditingController otp = TextEditingController();
+  TextEditingController studentId=TextEditingController();
+  TextEditingController password=TextEditingController();
+
   bool optpage=false;
   bool isPast=false;
   bool isSubmitButton=false;
@@ -53,12 +62,13 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       height: screenHeight*0.47,
                       width: screenWidth*0.3,
                       child: ListView(
+                        physics: NeverScrollableScrollPhysics(),
                         //mainAxisAlignment: MainAxisAlignment.start,
                         children:[
                           SizedBox(height: screenHeight*0.2,),
-                          Text("Student",style: TextStyle(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
-                          Text("Registraion",style: TextStyle(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
-                          Text("Form",style: TextStyle(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
+                          Text("Student",style: GoogleFonts.lato(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
+                          Text("Registraion",style: GoogleFonts.lato(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
+                          Text("Form",style: GoogleFonts.lato(fontSize:50,fontWeight: FontWeight.w900,color: Colors.black),),
                         ],
                       ),
                     ),
@@ -85,12 +95,12 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       isFirst: true, 
                       isLast: false, 
                       isPast: true,
-                      eventCard: Text("Student Information",style: TextStyle(fontSize: 16.5,color: Colors.white),)),
+                      eventCard: Text("Student Information",style: GoogleFonts.lato(fontSize: 16.5,color: Colors.white),)),
                     StudentRegisterTimeline(
                       isFirst: false, 
                       isLast: true, 
                       isPast: false,
-                      eventCard: Text("Authentication",style: TextStyle(fontSize: 16.5,color: Colors.white)),),
+                      eventCard: Text("Authentication",style: GoogleFonts.lato(fontSize: 16.5,color: Colors.white)),),
                   ],
                 ),
               ),
@@ -175,7 +185,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       SizedBox(height: 10,),
                       RowTextfield(text1: "First Name", controller1: firstname, hintText1: "Enter your first Name", hintText2: 'Enter your last Name', text2: 'Last Name', controller2:lastname,),
                       SizedBox(height: 10,),
-                      RowTextfield(text1: "Father's Name", controller1: fatherName, hintText1: "Enter your father's Name", hintText2: 'Enter Mobile No. ', text2: "Enter father's Mobile No.", controller2:fatherMobile,),
+                      RowTextfield(text1: "Father's Name", controller1: fatherName, hintText1: "Enter your father's Name", hintText2: 'Enter School Id ', text2: "School ID", controller2:schoolId,),
                       SizedBox(height: 10,),
                       Row(
                       children: [
@@ -205,7 +215,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              hintText: "dd/mm/yyyy",
+                              hintText: "yyyy/mm/dd",
                               hintStyle:TextStyle(fontSize: 14) ,
                               suffixIcon:Icon(Icons.calendar_month_sharp),
                               ),
@@ -214,7 +224,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                                   context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2101));
                                   if (pickeddate!=null){
                                     setState(() {
-                                      dob.text =DateFormat('dd-MM-yyyy').format(pickeddate);
+                                      dob.text =DateFormat('yyyy-MM-dd').format(pickeddate);
                                     });
                                   }
                               },
@@ -226,13 +236,13 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Gender",style: TextStyle(fontSize: 18),),
+                            Text("Class",style: TextStyle(fontSize: 18),),
                             SizedBox(height: 8,),
                             SizedBox(
                               height: screenHeight*0.05,
                               width: screenWidth*0.25,
                               child: TextField(
-                              //controller:controller2 ,
+                              controller:classController ,
                               cursorColor: Colors.deepPurple,
                               decoration:InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
@@ -249,7 +259,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                hintText:"Male/Female/Others",
+                                hintText:"Class",
                                 hintStyle:TextStyle(fontSize: 14) 
                                 ),
                                                     
@@ -263,42 +273,8 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       SizedBox(height: 10,),
                       RowTextfield(text1: "Mobile No.", controller1: studentMobile, hintText1: "10-Digit Mobile No.", hintText2: 'Enter your Email Address', text2: 'Email Address', controller2:studentMail,),
                       SizedBox(height: 10,),
-                      Align(
-                        alignment: AlignmentDirectional.bottomStart,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("School ID",style: TextStyle(fontSize: 18),),
-                              SizedBox(height: 8,),
-                                   SizedBox(
-                                    height: screenHeight*0.05,
-                                    width: screenWidth*0.1,
-                                    child: TextField(
-                                    controller:schoolId ,
-                                    cursorColor: Colors.deepPurple,
-                                    decoration:InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
-                                      focusColor: Colors.deepPurple,
-                                      hoverColor: Colors.deepPurple,
-                                      focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      borderSide: BorderSide(color: Colors.deepPurple, width: 2.5),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                    hintText: "School ID",
-                                    hintStyle:TextStyle(fontSize: 14) ,
-                                    ),
-                                    ),
-                                  ),
-                          ],
-                        ),
-                      ),
+                      RowTextfield(text1: "Student ID", controller1: studentId, hintText1: "Enter Student ID", hintText2: 'Enter your password', text2: 'Password', controller2:password,),
+                      //SizedBox(height: 10,),
                       ],
                       ),
                       ),
@@ -314,10 +290,34 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                     height: screenHeight*0.035,
                     width: screenWidth*0.09,
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async{
+                        String phoneNumber = studentMobile.text.trim();
+                        //String VerificationId='';
+                        //String phoneNumber = studentMobile.text.trim();
+                        if (!optpage) {
+                          // If not on OTP page, send OTP
+                         await  studentController.verifyPhoneNumber(phoneNumber);
+                          
+                        } else {
+                          // If on OTP page, verify OTP
+                          String enteredOTP = otp.text.trim();
+                          studentController.verifyOTP(enteredOTP);
+                          
+                          await studentController.registerStudentInfo(
+                          schoolId.text.toString(), 
+                          firstname.text.toString(), 
+                          classController.text.toString(), 
+                          fatherName.text.toString(), 
+                          dob.text.toString(),
+                           studentMobile.text.toString(), 
+                           studentId.text.toString(), 
+                           password.text.toString()
+                           );
+                         
+                        }
+                        studentController.verifyPhoneNumber(phoneNumber);
                         setState(() {
-                      optpage=true;
-                     // isPast=true;
+                          optpage = true;
                       isSubmitButton=true;
                     });
                       },

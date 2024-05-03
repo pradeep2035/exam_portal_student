@@ -8,7 +8,10 @@ import 'package:sat_exam_portal/controllers/student_question_controller.dart';
 import 'package:sat_exam_portal/screens/exam_portal/exam_portal_screen.dart';
 
 class studentDashboard extends StatefulWidget {
-  const studentDashboard({super.key});
+  final String studentId;
+  final String studentName;
+  final String schoolId;
+  const studentDashboard({super.key, required this.studentId, required this.studentName, required this.schoolId});
 
   @override
   State<studentDashboard> createState() => _studentDashboardState();
@@ -16,7 +19,6 @@ class studentDashboard extends StatefulWidget {
 
 class _studentDashboardState extends State<studentDashboard> {
   bool isFetched = false;
-  final String school_id = "1122";
   @override
   void initState() {
     // TODO: implement initState
@@ -30,7 +32,7 @@ class _studentDashboardState extends State<studentDashboard> {
   String level='';
   fetchExams()async{
     try {
-      List<Map<String, dynamic>> data = await student.fetchExams(school_id);
+      List<Map<String, dynamic>> data = await student.fetchExams(widget.schoolId.toString());
       setState(() {
         questionBank = data;
         isFetched = true;
@@ -80,9 +82,9 @@ class _studentDashboardState extends State<studentDashboard> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Student Name",
+                        widget.studentName,
                         style:
-                            TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                            GoogleFonts.workSans(fontSize: 30, fontWeight: FontWeight.w900),
                       ),
                     ),
                     SizedBox(
@@ -150,7 +152,7 @@ class _studentDashboardState extends State<studentDashboard> {
                               itemBuilder: (context, index) {
                                 final item = questionBank[index];
                                 return GestureDetector(
-                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamPortalScreen(exam_id: item['_id'], exam_name: item['test_name'],total_marks: item['total_marks'],))),
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>ExamPortalScreen(exam_id: item['_id'], exam_name: item['test_name'],total_marks: item['total_marks'],duration:item['duration'],studentId:widget.studentId))),
                                   child: ListTemplate(
                                     test_name: item['test_name']!,
                                     duration: item['duration']!,

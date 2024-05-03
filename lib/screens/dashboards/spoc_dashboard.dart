@@ -2,16 +2,47 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:sat_exam_portal/controllers/spoc_data_controller.dart';
+import 'package:sat_exam_portal/screens/registered_students.dart';
 import 'package:sat_exam_portal/screens/spoc_question_creation.dart';
 
 class SpocDashboard extends StatefulWidget {
-  const SpocDashboard({super.key});
+  final String spocId;
+  final String schoolId;
+  const SpocDashboard({super.key, required this.spocId, required this.schoolId});
 
   @override
   State<SpocDashboard> createState() => _SpocDashboardState();
 }
 
 class _SpocDashboardState extends State<SpocDashboard> {
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchSpocData();
+  }
+
+ List spocDetails=[];
+ final SpocDataController spocd = Get.put(SpocDataController());
+
+ fetchSpocData()async{
+  try {
+    List<dynamic> data = await spocd.fetchspocDetails(widget.spocId.toString());
+    setState(() {
+      spocDetails = data;
+    });
+    print(spocDetails);
+  } catch (e) {
+    print("Error fetching Spoc data: $e");
+    // Handle error scenario
+  }
+ }
+ 
+ 
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -20,7 +51,10 @@ class _SpocDashboardState extends State<SpocDashboard> {
       body: Container(
         height: screenHeight,
         width: screenWidth,
-        child: Row(
+        child:spocDetails.isEmpty?Center(
+          child: CircularProgressIndicator(),
+        ): 
+        Row(
           //mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
@@ -28,39 +62,45 @@ class _SpocDashboardState extends State<SpocDashboard> {
               width: screenWidth * 0.03,
               color: Colors.deepPurple,
             ),
+          
             Container(
               height: screenHeight,
               width: screenWidth * 0.6,
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Hey!",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0, top: 30),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Hey!",
+                        style: GoogleFonts.workSans(
+                            fontSize: 33, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Spoc Name",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                 
+                  Padding(
+                    padding: const EdgeInsets.only(left: 35.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        spocDetails[0]['spoc_name'].toString(),
+                        style: GoogleFonts.workSans(
+                            fontSize: 50, fontWeight: FontWeight.w700),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "Happy to see you again",
-                      style: TextStyle(
-                        fontSize: 18,
+                  
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Happy to see you again",
+                        style: GoogleFonts.lato(
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -74,7 +114,8 @@ class _SpocDashboardState extends State<SpocDashboard> {
                             left: screenWidth * 0.1,
                             child: GestureDetector(
                               onTap: () {
-                                Get.to(()=>QuestionPaper());
+                                print("TAPPEDD");
+                                Get.to(() => QuestionPaper());
                               },
                               child: Container(
                                 height: screenHeight * 0.23,
@@ -90,7 +131,8 @@ class _SpocDashboardState extends State<SpocDashboard> {
                                       bottom: 0,
                                       top: 10),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: 20,
@@ -133,53 +175,59 @@ class _SpocDashboardState extends State<SpocDashboard> {
                         Positioned(
                             top: screenHeight * 0.2,
                             left: screenWidth * 0.35,
-                            child: Container(
-                              height: screenHeight * 0.23,
-                              width: screenWidth * 0.1,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: Colors.blue,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20.0,
-                                    right: 20.0,
-                                    bottom: 0,
-                                    top: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                      "Student",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                    SizedBox(
-                                      height: 1,
-                                    ),
-                                    Text(
-                                      "Data",
-                                      style: TextStyle(
-                                          fontSize: 33,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 35,
-                                    ),
-                                    Text(
-                                      "Check",
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.white),
-                                    ),
-                                    // Positioned(
-                                    //   //top: screenHeight*0.04,
-                                    //   left: screenWidth*0.2,
-                                    //   child: Image.asset("assets/student_data.png",height: screenHeight*0.2,)),
-                                  ],
+                            child: GestureDetector(
+                              onTap: () {
+                                //String schoolId=spocDetails[0]['spoc_name'].toString();
+                                          Get.to(()=>RegisteredStudents(schoolId:widget.schoolId.toString()));
+                              },
+                              child: Container(
+                                height: screenHeight * 0.23,
+                                width: screenWidth * 0.1,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Colors.blue,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20.0,
+                                      right: 20.0,
+                                      bottom: 0,
+                                      top: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        "Student",
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                      SizedBox(
+                                        height: 1,
+                                      ),
+                                      Text(
+                                        "Data",
+                                        style: TextStyle(
+                                            fontSize: 33,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 35,
+                                      ),
+                                      Text(
+                                        "Check",
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                      // Positioned(
+                                      //   //top: screenHeight*0.04,
+                                      //   left: screenWidth*0.2,
+                                      //   child: Image.asset("assets/student_data.png",height: screenHeight*0.2,)),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ))
@@ -187,7 +235,9 @@ class _SpocDashboardState extends State<SpocDashboard> {
                     ),
                   ),
                   Divider(),
-                  SizedBox(height: screenHeight*0.02,),
+                  SizedBox(
+                    height: screenHeight * 0.02,
+                  ),
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

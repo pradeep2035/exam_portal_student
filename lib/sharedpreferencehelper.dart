@@ -87,69 +87,77 @@ class SharedPreferencesHelper {
     _prefs.setString("userCompetitionName", userCompetitionName);
   }
 
-  static String getUserCompetitionName() {
-    return _prefs.getString("userCompetitionName") ?? "";
+
+
+
+//===================================================STUDENT DETAILS
+  static String getStudentName() {
+    return _prefs.getString("studentName") ?? "";
   }
 
-  static void setUserBoardPref({required String userBoardPref}) {
-    _prefs.setString("userBoardPref", userBoardPref);
+  static void setStudentNamePref({required String studentName}) {
+    _prefs.setString("studentName", studentName);
   }
 
-  static String getUserBoardPref() {
-    return _prefs.getString("userBoardPref") ?? "Coding";
+  static String getschoolId() {
+    return _prefs.getString("schoolId") ?? "";
   }
  
 
- static void setUserBoardIndexPref({required int userBoardIndexPref}) {
-    _prefs.setInt("userBoardIndexPref", userBoardIndexPref);
+ static void setschoolId({required String schoolId}) {
+    _prefs.setString("schoolId", schoolId);
   }
 
-  static int getUserBoardIndexPref() {
-    return _prefs.getInt("userBoardIndexPref") ?? 0 ;
-  }
-
-
-  static void setUserLanguagePref({required String userLanguagePref}) {
-    _prefs.setString("userLanguagePref", userLanguagePref);
-  }
-
-  static String getUserLanguagePref() {
-    return _prefs.getString("userLanguagePref") ?? "English";
+  static String getstudentClass() {
+    return _prefs.getString("studentClass") ?? "" ;
   }
 
 
- static void setUserLanguageIndexPref({required int userLanguageIndexPref}) {
-    _prefs.setInt("userLanguageIndexPref", userLanguageIndexPref);
+  static void setstudentClass({required String studentClass}) {
+    _prefs.setString("studentClass", studentClass);
   }
 
-  static int getUserLanguageIndexPref() {
-    return _prefs.getInt("userLanguageIndexPref") ?? 0 ;
-  }
-
-
-  static void setUserClassPref({required String userClassPref}) {
-    _prefs.setString("userClassPref", userClassPref);
-  }
-
-  static String getUserClassPref() {
-    return _prefs.getString("userClassPref") ?? "All Classes";
-  }
-
-   static void setUserClassIndexPref({required int userClassIndexPref}) {
-    _prefs.setInt("userClassIndexPref", userClassIndexPref);
-  }
-
-  static int getUserClassIndexPref() {
-    return _prefs.getInt("userClassIndexPref") ?? 0 ;
+  static String getstudentFatherName() {
+    return _prefs.getString("studentFatherName") ?? "";
   }
 
 
- static void setUserPref({required String userPref}) {
-    _prefs.setString("userPref", userPref);
+ static void setstudentFatherName({required String studentFatherName}) {
+    _prefs.setString("studentFatherName", studentFatherName);
   }
 
-  static String getUserPref() {
-    return _prefs.getString("userPref") ?? "";
+
+
+  static void setdateOfBirth({required String dateOfBirth}) {
+    _prefs.setString("dateOfBirth", dateOfBirth);
+  }
+
+  static String getdateOfBirth() {
+    return _prefs.getString("dateOfBirth") ?? "";
+  }
+
+   static void setstudentContactNumber({required String studentContactNumber}) {
+    _prefs.setString("studentContactNumber", studentContactNumber);
+  }
+
+  static String getstudentContactNumber() {
+    return _prefs.getString("studentContactNumber") ?? "" ;
+  }
+
+
+ static void setStudentId({required String studentId}) {
+    _prefs.setString("StudentId", studentId);
+  }
+
+  static String getStudentId() {
+    return _prefs.getString("StudentId") ?? "";
+  }
+ static void setstudentPassword({required String studentPassword}) {
+    _prefs.setString("studentPassword", studentPassword);
+  }
+
+  static String getstudentPassword() {
+    return _prefs.getString("studentPassword") ?? "";
   }
   
 

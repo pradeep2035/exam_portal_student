@@ -6,16 +6,20 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_transition_mixin.dart';
 import 'package:sat_exam_portal/controllers/question_paper_controller.dart';
+import 'package:sat_exam_portal/screens/auth/login.dart';
+import 'package:sat_exam_portal/screens/dashboards/student_dashboard.dart';
 
 class ExamPortalScreen extends StatefulWidget {
   final exam_id;
   final exam_name;
   final total_marks;
+  final duration;
+  final studentId;
   const ExamPortalScreen({
     Key? key,
     required this.exam_id,
     required this.exam_name,
-    required this.total_marks,
+    required this.total_marks, this.duration, this.studentId,
   }) : super(key: key);
 
   @override
@@ -103,7 +107,7 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                           children: [
                             Container(
                               height: screenHeight * 0.08,
-                              width: screenWidth * 0.1,
+                              width: screenWidth * 0.14,
                               decoration: BoxDecoration(
                                   //color: Colors.white,
                                   border:
@@ -116,8 +120,9 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                                       Icons.timer,
                                       color: Colors.white,
                                     ),
+                                    SizedBox(width:6),
                                     Text(
-                                      "Duration :",
+                                      "Duration : ${widget.duration} hrs",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500,
@@ -149,7 +154,8 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                                       Icons.person,
                                       color: Colors.white,
                                     ),
-                                    Text("Username",
+                                    SizedBox(width:6),
+                                    Text(widget.studentId.toString(),
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -164,6 +170,7 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                   SizedBox(
                     height: screenHeight * 0.06,
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -180,7 +187,7 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "Question:",
+                                "Question:${selectedQuestionIndex + 1}",
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
@@ -202,7 +209,7 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
                               color: Colors.white,
                             ),
                             child: Text(
-                              "Q${selectedQuestionIndex + 1}. $questions",
+                               questions,
                               style: TextStyle(
                                   fontSize: 22,
                                   color: const Color.fromARGB(255, 33, 33, 33),
@@ -633,12 +640,12 @@ class _ExamPortalScreenState extends State<ExamPortalScreen> {
 
                                       double percentage = totalCorrectAnswers /
                                           questionBank.length;
-                                      // showDialog(
-                                      //   context: context,
-                                      //   builder: (BuildContext context) {
-                                      //     return ResultPopupCard(percentage);
-                                      //   },
-                                      // );
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return ResultPopupCard(percentage);
+                                        },
+                                      );
                                     }
                                   }
                                 }
@@ -724,7 +731,7 @@ class ResultPopupCard extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.off(()=>LoginPage());
           },
           child: Text('Close'),
         ),

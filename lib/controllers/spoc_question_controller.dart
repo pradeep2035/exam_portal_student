@@ -1,8 +1,8 @@
   import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:sat_exam_portal/api_value.dart';
-import 'package:sat_exam_portal/screens/auth/student_register.dart';
 import 'package:sat_exam_portal/screens/dashboards/spoc_dashboard.dart';
+import 'package:sat_exam_portal/screens/dashboards/student_dashboard.dart';
 
 class SpocController extends GetxController{
    Dio dio = Dio();
@@ -92,6 +92,7 @@ Future<List<Map<String, dynamic>>> searchQuestion(String query) async {
   }
 }
 
+
  spocLogin(String spocId, String spocPassword) async {
   try {
     // Make API call to submit question IDs
@@ -103,8 +104,13 @@ Future<List<Map<String, dynamic>>> searchQuestion(String query) async {
         }
     );
     if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = response.data;
+        
+        // Store the parsed data in a variable
+      String spocId = responseData['spoc_id'];
+      String schoolId = responseData['school_id'];
       print("successfully login");
-      Get.off(()=>SpocDashboard());
+      Get.off(()=>SpocDashboard(spocId:spocId, schoolId:schoolId));
     } else {
       throw Exception('Failed to submit data');
     }
@@ -113,6 +119,7 @@ Future<List<Map<String, dynamic>>> searchQuestion(String query) async {
     // Handle error, maybe show a snackbar or toast
   }
 }
+
 
 
  studentLogin(String studentId, String studentPassword) async {
@@ -127,8 +134,12 @@ Future<List<Map<String, dynamic>>> searchQuestion(String query) async {
         }
     );
     if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = response.data;
       print("successfully login");
-      Get.off(()=>StudentRegistration());
+      String studentId = responseData['student_id'];
+      String studentName = responseData['student_name'];
+      String schoolId = responseData['school_id'];
+      Get.off(()=>studentDashboard(studentId:studentId, studentName:studentName,schoolId:schoolId));
     } else {
       throw Exception('Failed to submit data');
     }

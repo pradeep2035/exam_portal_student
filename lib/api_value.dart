@@ -7,6 +7,13 @@ class ApiValue {
   //========================================================Authentication
   String spocLoginUrl = '${url[isBeta]}spoc_login';
   String studentLoginUrl = '${url[isBeta]}login/student';
+  String studentRegistrationUrl = '${url[isBeta]}post/student_info';
+
+  //========================================================spocdetails
+  String spocdetailsUrl = '${url[isBeta]}spoc_details';
+  //========================================================spocdetails
+  String registeredStudentDetailsUrl = '${url[isBeta]}fetch_student_info';
+
   //========================================================Question Bank
   String questionUploadUrl = '${url[isBeta]}post/question_bank';
   String questionListUrl = '${url[isBeta]}get/question_bank';

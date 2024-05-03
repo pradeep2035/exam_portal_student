@@ -5,11 +5,11 @@ import 'package:sat_exam_portal/api_value.dart';
 class QuestionPaperController extends GetxController{
    Dio dio = Dio();
 
- Future<List<Map<String, dynamic>>> fetchQuestionPaper(String exam_id) async {
+ Future<List<Map<String, dynamic>>> fetchQuestionPaper(String examid) async {
   
     try {
-      final response = await dio.get(apiValue.questionPaperUrl+exam_id);
-      print(apiValue.questionPaperUrl+exam_id);
+      final response = await dio.get(apiValue.questionPaperUrl+examid);
+      print(apiValue.questionPaperUrl+examid);
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
         final List<Map<String, dynamic>> typedData = data.cast<Map<String, dynamic>>();
